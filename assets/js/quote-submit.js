@@ -3,6 +3,15 @@
   const modal = document.querySelector('#quoteModal');
   if(!modal) return;
 
+  // FormSubmit requires an absolute URL for _next (redirect after POST).
+  // GitHub Pages often serves under a repo sub-path, so compute the correct base.
+  const nextInput = document.getElementById('nextUrl');
+  if (nextInput) {
+    const path = window.location.pathname;
+    const dir = path.endsWith('/') ? path : path.slice(0, path.lastIndexOf('/') + 1);
+    nextInput.value = window.location.origin + dir + 'thanks.html';
+  }
+
   function openModal(){
     modal.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden';

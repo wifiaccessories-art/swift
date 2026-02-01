@@ -337,13 +337,13 @@
       <button class="icon-btn" type="button" aria-label="Close" data-close="true">✕</button>
     </div>
 
-    <form class="form" id="quoteForm" action="https://formsubmit.co/ankur.savla90@gmail.com" method="POST">
+    <form class="form" id="quoteForm" action="https://formsubmit.co/ankur.savla90@gmail.com" method="POST" accept-charset="UTF-8">
   <div class="modal-body">
     <input type="hidden" name="_cc" value="sales@swiftlogistics.ca">
     <input type="hidden" name="_subject" value="New Quote Request — Swift Logistics">
     <input type="hidden" name="_captcha" value="false">
-    <!-- Use a RELATIVE thank-you page so it works on GitHub Pages / subfolders -->
-    <input type="hidden" name="_next" value="thanks.html">
+    <!-- _next must be an absolute URL for GitHub Pages (repo sub-path). Set via JS. -->
+    <input type="hidden" id="nextUrl" name="_next" value="">
 
     <div class="grid-2">
       <label>
