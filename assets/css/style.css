@@ -42,6 +42,7 @@ body{
     radial-gradient(700px 500px at 60% 120%, rgba(110,231,255,.12), transparent 60%),
     linear-gradient(180deg, var(--bg), var(--bg2));
   min-height:100vh;
+  overflow-x:hidden;
 }
 
 a{color:inherit}
@@ -561,14 +562,17 @@ input,select,textarea{
   background: rgba(255,255,255,.04);
   padding: 12px 12px;
   outline:none;
+  width: 100%;
+  box-sizing: border-box;
 }
 input:focus,select:focus,textarea:focus{
   border-color: rgba(110,231,255,.45);
-  box-shadow: 0 0 0 4px rgba(110,231,255,.12);
+  /* Slightly tighter focus ring so adjacent fields never visually clash */
+  box-shadow: 0 0 0 3px rgba(110,231,255,.12);
 }
 textarea{resize: vertical; min-height: 120px}
-.grid-2{display:grid; grid-template-columns: 1fr 1fr; gap: 12px}
-.grid-3{display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px}
+.grid-2{display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px}
+.grid-3{display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,1fr); gap: 22px}
 .form-actions{display:flex; gap: 10px; flex-wrap:wrap; margin-top: 6px}
 
 .map-wrap{
@@ -653,7 +657,15 @@ html[data-theme="light"] .site-footer{ background: rgba(20,23,35,.04); }
   background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.05));
   box-shadow: var(--shadow);
   padding: 16px;
+  /* Prevent horizontal overflow that can create a bottom scrollbar */
+  overflow-x:hidden;
 }
+
+/* Allow grid children to shrink instead of forcing page overflow */
+.grid-2 > *, .grid-3 > *{min-width:0}
+
+/* Defensive: any form control stays within its column */
+input, select, textarea{max-width:100%}
 .modal-head{
   display:flex;
   justify-content:space-between;
