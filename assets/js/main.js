@@ -2,224 +2,152 @@
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  // ------------------------------
-  // ------------------------------
-  const rootEl = document.documentElement;
-  }
+  // Force dark theme (theme switch removed)
+  document.documentElement.setAttribute('data-theme', 'dark');
 
-    if (!btn) return;
-    if (icon) icon.textContent = isLight ? "☀" : "☾";
-  };
+  // -------------------------------------------------
+  // Mobile menu toggle
+  // -------------------------------------------------
+  const navToggle = $('.nav-toggle');
+  const navMenu = $('#navMenu');
 
-    btn.addEventListener("click", () => {
-      const next = cur === "dark" ? "light" : "dark";
-    });
-  });
-
-  // ------------------------------
-  // Mobile menu
-  // ------------------------------
-  const navToggle = $(".nav-toggle");
-  const navMenu = $("#navMenu");
   if (navToggle && navMenu) {
-    navToggle.addEventListener("click", () => {
-      const open = navMenu.classList.toggle("open");
-      navToggle.setAttribute("aria-expanded", String(open));
-      navToggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    navToggle.addEventListener('click', () => {
+      const open = navMenu.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
     });
 
-    $$(".nav-link", navMenu).forEach((link) => {
-      link.addEventListener("click", () => {
-        navMenu.classList.remove("open");
-        navToggle.setAttribute("aria-expanded", "false");
-        navToggle.setAttribute("aria-label", "Open menu");
-      });
+    $$('#navMenu a').forEach((a) =>
+      a.addEventListener('click', () => {
+        navMenu.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      })
+    );
+
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth > 768) return;
+      if (!navMenu.classList.contains('open')) return;
+      const t = e.target;
+      if (navMenu.contains(t) || navToggle.contains(t)) return;
+      navMenu.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
     });
   }
 
-  // ------------------------------
-  // Quote modal
-  // ------------------------------
-  const modal = $("#quoteModal");
-  const openBtns = $$(".quote-open");
+  // -------------------------------------------------
+  // Quote modal (open/close)
+  // -------------------------------------------------
+  const quoteModal = $('#quoteModal');
+  const openQuoteBtns = $$('[data-open-quote]');
+  const closeQuoteBtns = $$('[data-close-quote]');
 
-  const closeModal = () => {
-    if (!modal) return;
-    modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
+  const openQuote = () => {
+    if (!quoteModal) return;
+    quoteModal.classList.add('open');
+    document.body.classList.add('modal-open');
+    const first = $('#quoteModal input, #quoteModal select, #quoteModal textarea');
+    if (first) setTimeout(() => first.focus(), 50);
   };
 
-  const openModal = () => {
-    if (!modal) return;
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-    const first = $("input,select,textarea,button", modal);
-    if (first) setTimeout(() => first.focus(), 0);
+  const closeQuote = () => {
+    if (!quoteModal) return;
+    quoteModal.classList.remove('open');
+    document.body.classList.remove('modal-open');
   };
 
-  openBtns.forEach((b) => b.addEventListener("click", openModal));
+  openQuoteBtns.forEach((btn) => btn.addEventListener('click', openQuote));
+  closeQuoteBtns.forEach((btn) => btn.addEventListener('click', closeQuote));
 
-  if (modal) {
-    modal.addEventListener("click", (e) => {
-      const target = e.target;
-      if (target && target.dataset && target.dataset.close === "true") closeModal();
+  if (quoteModal) {
+    quoteModal.addEventListener('click', (e) => {
+      if (e.target === quoteModal) closeQuote();
     });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && modal.getAttribute("aria-hidden") === "false") closeModal();
-    });
-  }
-
-  // ------------------------------
-  // Quote form -> mailto
-  // ------------------------------
-  const quoteForm = $("#quoteForm");
-  if (quoteForm) {
-    quoteForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const data = new FormData(quoteForm);
-      const lines = [
-        `Name: ${data.get("name") || ""}`,
-        `Email: ${data.get("email") || ""}`,
-        `Service: ${data.get("service") || ""}`,
-        `Origin: ${data.get("origin") || ""}`,
-        `Destination: ${data.get("destination") || ""}`,
-        `Cargo: ${data.get("cargo") || ""}`,
-        `Ready date: ${data.get("ready") || ""}`,
-        ``,
-        `Notes:`,
-        `${data.get("notes") || ""}`,
-      ];
-      const subject = encodeURIComponent(`Quote Request — ${data.get("service") || "Freight"}`);
-      const body = encodeURIComponent(lines.join("\n"));
-      closeModal();
-      quoteForm.reset();
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && quoteModal.classList.contains('open')) closeQuote();
     });
   }
 
-  // ------------------------------
-  // Contact form -> mailto
-  // ------------------------------
-  const contactForm = $("#contactForm");
-  if (contactForm) {
-    contactForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const data = new FormData(contactForm);
-      const subjectText = data.get("subject") || "Website inquiry";
-      const lines = [`Name: ${data.get("name") || ""}`, `Email: ${data.get("email") || ""}`, ``, `${data.get("message") || ""}`];
-      const subject = encodeURIComponent(subjectText);
-      const body = encodeURIComponent(lines.join("\n"));
-      contactForm.reset();
-    });
-  }
-
-  // ------------------------------
-  // Reveal animations (smooth + staggered)
-  // ------------------------------
-  const revealEls = $$(".reveal");
-  const staggerGroups = [".services-grid", ".steps", ".reasons-grid", ".mini-cards", ".cards"];
-
-  // Apply auto-stagger within common grids
-  staggerGroups.forEach((sel) => {
-    $$(sel).forEach((group) => {
-      const items = $$(".reveal", group);
-      items.forEach((el, i) => {
-        if (!el.style.getPropertyValue("--d")) {
-          el.style.setProperty("--d", `${i * 70}ms`);
-        }
-      });
-    });
-  });
-
+  // -------------------------------------------------
+  // Reveal animations
+  // -------------------------------------------------
+  const revealEls = $$('.reveal');
   if (revealEls.length) {
     const io = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("in");
+            entry.target.classList.add('in');
             io.unobserve(entry.target);
           }
-        }
+        });
       },
-      { threshold: 0.14, rootMargin: "0px 0px -8% 0px" }
+      { threshold: 0.12 }
     );
+
     revealEls.forEach((el) => io.observe(el));
   }
 
-  // ------------------------------
-  // Ambient particles canvas (AI vibe)
-  // ------------------------------
-  const fx = document.getElementById("fxCanvas");
-  if (fx) {
-    const ctx = fx.getContext("2d");
-    const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const state = {
-      w: 0,
-      h: 0,
-      dpr: Math.max(1, Math.min(2, window.devicePixelRatio || 1)),
-      particles: [],
-      count: 46,
-      t: 0,
-      raf: 0,
-    };
+  // -------------------------------------------------
+  // Ambient background canvas
+  // -------------------------------------------------
+  const canvas = $('#bgFx');
+  if (canvas && canvas.getContext) {
+    const ctx = canvas.getContext('2d');
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
 
     const resize = () => {
-      state.w = fx.clientWidth || window.innerWidth;
-      state.h = fx.clientHeight || window.innerHeight;
-      fx.width = Math.floor(state.w * state.dpr);
-      fx.height = Math.floor(state.h * state.dpr);
-      ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+      const { innerWidth: w, innerHeight: h } = window;
+      canvas.width = Math.floor(w * DPR);
+      canvas.height = Math.floor(h * DPR);
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     };
 
-    const rand = (min, max) => min + Math.random() * (max - min);
+    resize();
+    window.addEventListener('resize', resize);
 
-    const seed = () => {
-      state.particles = Array.from({ length: state.count }).map(() => ({
-        x: rand(0, state.w),
-        y: rand(0, state.h),
-        r: rand(1.2, 2.6),
-        vx: rand(-0.18, 0.18),
-        vy: rand(-0.12, 0.12),
-        a: rand(0.18, 0.46),
-      }));
-    };
+    const particles = Array.from({ length: 70 }).map(() => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
+      r: 1.2 + Math.random() * 1.8,
+      a: 0.12 + Math.random() * 0.18,
+    }));
 
-    const draw = () => {
-      ctx.clearRect(0, 0, state.w, state.h);
+    const lineColor = 'rgba(120, 190, 255, 0.08)';
+    const dotColor = (a) => `rgba(180, 220, 255, ${a})`;
 
-      ctx.globalCompositeOperation = "lighter";
+    const step = () => {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-      // points
-      for (const p of state.particles) {
+      // dots
+      for (const p of particles) {
         p.x += p.vx;
         p.y += p.vy;
-
-        // gentle drift
-        if (p.x < -10) p.x = state.w + 10;
-        if (p.x > state.w + 10) p.x = -10;
-        if (p.y < -10) p.y = state.h + 10;
-        if (p.y > state.h + 10) p.y = -10;
+        if (p.x < -10) p.x = window.innerWidth + 10;
+        if (p.x > window.innerWidth + 10) p.x = -10;
+        if (p.y < -10) p.y = window.innerHeight + 10;
+        if (p.y > window.innerHeight + 10) p.y = -10;
 
         ctx.beginPath();
+        ctx.fillStyle = dotColor(p.a);
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = isLight ? `rgba(40,60,120,${p.a})` : `rgba(140,220,255,${p.a})`;
         ctx.fill();
       }
 
-      // lines (nearby)
-      ctx.globalAlpha = isLight ? 0.18 : 0.22;
-      for (let i = 0; i < state.particles.length; i++) {
-        for (let j = i + 1; j < state.particles.length; j++) {
-          const a = state.particles[i];
-          const b = state.particles[j];
+      // links
+      ctx.strokeStyle = lineColor;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const a = particles[i];
+          const b = particles[j];
           const dx = a.x - b.x;
           const dy = a.y - b.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 140) {
-            const strength = (1 - dist / 140) * (isLight ? 0.35 : 0.55);
-            ctx.strokeStyle = isLight ? `rgba(60,80,140,${strength})` : `rgba(124,58,237,${strength})`;
-            ctx.lineWidth = 1;
+          const d = Math.hypot(dx, dy);
+          if (d < 140) {
+            ctx.globalAlpha = 1 - d / 140;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -227,40 +155,17 @@
           }
         }
       }
-
       ctx.globalAlpha = 1;
-      ctx.globalCompositeOperation = "source-over";
+
+      requestAnimationFrame(step);
     };
 
-    const tick = () => {
-      draw();
-      state.raf = window.requestAnimationFrame(tick);
-    };
-
-    resize();
-    seed();
-
-    window.addEventListener("resize", () => {
-      resize();
-      seed();
-    });
-
-    if (!prefersReduced) tick();
+    requestAnimationFrame(step);
   }
 
-  // ------------------------------
-  // Back to top
-  // ------------------------------
-  const toTop = $("#toTop");
-  const onScroll = () => {
-    const y = window.scrollY || document.documentElement.scrollTop;
-    if (!toTop) return;
-    if (y > 600) toTop.classList.add("show");
-    else toTop.classList.remove("show");
-  };
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-  if (toTop) {
-    toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-  }
+  // -------------------------------------------------
+  // IMPORTANT:
+  // We intentionally do NOT intercept form submission.
+  // Forms should submit via standard POST to FormSubmit.
+  // -------------------------------------------------
 })();

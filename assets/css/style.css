@@ -175,13 +175,14 @@ html[data-theme="light"] .site-header{ background: rgba(255,255,255,.78); }
 .hero{
   position:relative;
   overflow:hidden;
-  padding: 46px 0 24px;
+  padding: 16px 0 24px;
+  /* Keep hero content close to the header (remove large empty band) */
 }
 .hero-media{
   position:absolute;
-  inset:-40px -40px 0 -40px;
-  opacity:.24;
-  transform: scale(1.06);
+  inset:0;
+  background: url("../images/ship-top-containers.jpg") center/cover no-repeat;
+  opacity:.55;
   filter: saturate(1.05) contrast(1.08);
   overflow:hidden;
 }
@@ -1485,5 +1486,33 @@ input::placeholder, textarea::placeholder{
   align-items: center;
   justify-content: center;
   min-height: 44px;
+}
+
+/* =========================================================
+   Extra responsiveness polish (mobile + tablet)
+   ========================================================= */
+
+@media (max-width: 1024px){
+  .section{padding: 72px 0}
+  .section-header h2{font-size: 34px}
+}
+
+@media (max-width: 480px){
+  .nav-inner{padding: 12px 14px}
+  .brand-title{font-size: 16px}
+  .brand-sub{font-size: 12px}
+  .nav-cta .btn{padding: 10px 14px; font-size: 14px}
+
+  .section{padding: 64px 0}
+  .section-header h2{font-size: 30px}
+  .section-header p{font-size: 16px}
+
+  .card{padding: 18px}
+  .service-card{padding: 16px}
+
+  .modal-card{width: calc(100% - 24px); padding: 18px}
+  .modal-card h3{font-size: 28px}
+  .modal-actions{flex-direction: column}
+  .modal-actions .btn{width: 100%}
 }
 
