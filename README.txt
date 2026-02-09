@@ -24,6 +24,6 @@ Deploy
 
 Contact info currently set to:
 Swift Logistics
-3455 Wolfedale Road, Unit 7, Mississauga, ON, Canada
+3455 Wolfedale Road, Mississauga, ON, Canada
 (437) 922-4833
 sales@swiftlogistics.ca

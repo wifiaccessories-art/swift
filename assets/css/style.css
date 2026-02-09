@@ -123,6 +123,25 @@ html[data-theme="light"] .site-header{ background: rgba(255,255,255,.78); }
   align-items:center;
   gap:14px;
 }
+
+/* Drawer overlay (mobile) */
+.nav-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  backdrop-filter: blur(2px);
+  opacity:0;
+  pointer-events:none;
+  transition: opacity .18s ease;
+  z-index:70;
+}
+body.nav-open{
+  overflow:hidden;
+}
+body.nav-open .nav-overlay{
+  opacity:1;
+  pointer-events:auto;
+}
 .nav-link{
   text-decoration:none;
   color:var(--muted);
@@ -494,7 +513,20 @@ html[data-theme="light"] .site-header{ background: rgba(255,255,255,.78); }
   background: rgba(255,255,255,.04);
 }
 .service-media img{width:100%; height:100%; object-fit:cover; aspect-ratio: 16/11}
-.service-copy h2{margin:0 0 8px; font-family: var(--display)}
+.service-copy h2{
+  margin: 0 0 8px;
+  font-family: var(--display);
+  text-align: center; /* center only the service heading */
+}
+.service-copy{
+  /* Center the copy vertically so each service block looks balanced */
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap: 12px;
+  padding: 6px 4px;
+}
+.service-copy p{ margin:0 }
 .bullets{margin: 12px 0 0 18px; color: var(--muted)}
 .bullets li{margin: 8px 0}
 
@@ -555,6 +587,43 @@ html[data-theme="light"] .site-header{ background: rgba(255,255,255,.78); }
 }
 .info-label{font-size:.9rem; color: var(--muted2); margin-bottom: 2px}
 .divider{height:1px; background: var(--stroke); margin: 16px 0}
+
+/* Contact page - center the whole "Get in touch" content block */
+.contact-grid{
+  display:flex;
+  justify-content:center;
+}
+.contact-card{
+  width:100%;
+  max-width: 980px;
+  margin: 0 auto;
+  text-align:center;
+}
+.contact-info{
+  width:100%;
+  max-width: 560px;
+  margin: 18px auto 0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap: 14px;
+}
+.info-row{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap: 8px;
+}
+.info-row > div{
+  text-align:center;
+}
+@media (max-width: 640px){
+  .contact-card{ text-align:center; }
+  .contact-card h1, .contact-card h2{ text-align:center; }
+}
+
+
 .form{display:grid; gap: 12px}
 .form label{display:grid; gap: 7px; color: var(--muted)}
 input,select,textarea{
@@ -604,6 +673,64 @@ textarea{resize: vertical; min-height: 120px}
 .faq p{margin: 10px 0 0}
 
 /* Footer */
+
+/* ------------------------------------------------------------
+   Quote Modal – spacing + no-scrollbar polish (2026-02)
+   Fixes:
+   - labels sitting too close to the previous row's inputs
+   - Notes textarea height too tall (forces cramped layout)
+   - hides inner scrollbars (still allows scrolling if needed)
+------------------------------------------------------------ */
+
+#quoteModal #quoteForm.form{
+  /* more vertical breathing room between the grid rows */
+  gap: 34px !important;
+}
+
+#quoteModal #quoteForm .grid-3,
+#quoteModal #quoteForm .grid-2{
+  /* keep columns spaced evenly */
+  gap: 22px !important;
+}
+
+#quoteModal #quoteForm label{
+  /* label-to-control spacing */
+  gap: 12px !important;
+}
+
+#quoteModal #quoteForm textarea{
+  /* reduce Notes height to reclaim space for row spacing */
+  min-height: 80px !important;
+  height: 80px !important;
+}
+
+/* Center the quote modal title & subtitle (keep rest untouched) */
+#quoteModal .modal-head{
+  position: relative;
+  justify-content: center !important;
+}
+#quoteModal .modal-head > div{
+  width: 100%;
+  text-align: center;
+    padding-left: clamp(44px, 6vw, 72px);
+  padding-right: clamp(44px, 6vw, 72px); /* reserve space so the close button doesn't offset centering */
+}
+#quoteModal .modal-head .modal-close{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+
+
+/* Hide any inner scrollbar while preserving scroll (small screens) */
+#quoteModal .modal-body{
+  scrollbar-width: none;
+}
+#quoteModal .modal-body::-webkit-scrollbar{
+  width: 0;
+  height: 0;
+}
 .site-footer{
   padding: 34px 0 20px;
   border-top: 1px solid rgba(255,255,255,.06);
@@ -718,22 +845,30 @@ input, select, textarea{max-width:100%}
   .nav-toggle{display:block}
   .nav-menu{
     position: fixed;
-    top: 72px;
-    right: 14px;
-    left: 14px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: min(82vw, 320px);
     border: 1px solid var(--stroke);
-    background: rgba(10,12,20,.86);
-    backdrop-filter: blur(12px);
-    border-radius: 18px;
-    padding: 12px;
+    background: rgba(10,12,20,.92);
+    backdrop-filter: blur(16px);
+    border-left-color: rgba(255,255,255,.08);
+    border-radius: 0;
+    padding: 86px 16px 16px;
     flex-direction: column;
     align-items: stretch;
-    gap: 8px;
-    display:none;
+    gap: 10px;
+    display:flex;
+    transform: translateX(110%);
+    transition: transform .2s ease;
+    z-index: 90;
   }
   html[data-theme="light"] .nav-menu{background: rgba(255,255,255,.92)}
-  .nav-menu.open{display:flex}
+  .nav-menu.open{transform: translateX(0)}
   .nav-actions{margin-left:0; flex-direction:column}
+  .media-stack{gap: 14px;}
+  .media-card img{max-height: 240px;}
   .services-grid{grid-template-columns: 1fr}
   .steps{grid-template-columns: 1fr}
   .footer-grid{grid-template-columns: 1fr}
@@ -1459,6 +1594,28 @@ input::placeholder, textarea::placeholder{
 /* === FORM LAYOUT HELPERS === */
 .form-grid .span-2{grid-column: 1 / -1;}
 
+/* === QUOTE FORM: SPACING & READABILITY === */
+#quoteForm.form{ gap: 16px; }
+
+#quoteForm label{
+  gap: 10px;
+  line-height: 1.25;
+}
+
+#quoteForm input,
+#quoteForm select,
+#quoteForm textarea{
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+
+#quoteForm .grid-2{ gap: 16px; }
+#quoteForm .grid-3{ gap: 16px; }
+
+/* Keep status message from squeezing buttons */
+#quoteForm .form-actions{ flex-wrap: wrap; }
+#quoteForm #quoteStatus{ flex-basis: 100%; margin-top: 6px; }
+
 
 /* === Quote Modal: ensure action buttons are always visible === */
 .modal .modal-content{
@@ -1516,3 +1673,481 @@ input::placeholder, textarea::placeholder{
   .modal-actions .btn{width: 100%}
 }
 
+
+
+/* About: 3-up gallery row */
+.gallery-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch;margin-top:8px}
+.gallery-row img{width:100%;height:260px;object-fit:cover;border-radius:22px;box-shadow:0 14px 40px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+@media (max-width:900px){.gallery-row{grid-template-columns:1fr}.gallery-row img{height:220px}}
+
+/* Services page spacing polish (reduce large gap above recommendation banner) */
+body.services-page .section.services-main{ padding-bottom: 28px; }
+body.services-page .cta-banner{ padding-top: 28px; }
+@media (max-width: 720px){
+  body.services-page .section.services-main{ padding-bottom: 22px; }
+  body.services-page .cta-banner{ padding-top: 22px; }
+}
+
+
+/* Contact page centering fix */
+body.contact-page .contact-grid{
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+body.contact-page .contact-card{
+  /* Keep the card visually centered with balanced empty space on both sides */
+  width: min(640px, 100%);
+  margin: 0 auto;
+  padding-left: 44px;
+  padding-right: 44px;
+}
+
+/* Center the content block inside the card so it doesn't feel left-heavy */
+body.contact-page .contact-card h1,
+body.contact-page .contact-card h2{
+  text-align: center;
+}
+
+body.contact-page .contact-card .contact-info{
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   Quote modal safety: prevent bottom button from clipping
+   ========================================================= */
+.modal-card{
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 24px);
+  margin: 12px auto;
+}
+
+.modal-head{ flex: 0 0 auto; }
+
+.modal-body{
+  flex: 1 1 auto;
+  max-height: none;
+  overflow-y: auto;
+  padding-bottom: calc(18px + env(safe-area-inset-bottom));
+}
+
+.form-actions{
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+}
+
+/* =====================================================================
+   Quote modal final fixes (no clipped buttons, tidy spacing, no bars)
+   ===================================================================== */
+
+/* Keep the modal comfortably inside the viewport */
+.modal-card{max-height:92vh;}
+.modal-body{
+  max-height:calc(92vh - 120px);
+  overflow-y:auto;
+  padding-bottom:28px; /* prevents the Send Request button from clipping */
+  scrollbar-width:none; /* Firefox: hide scrollbar */
+}
+.modal-body::-webkit-scrollbar{width:0;height:0;} /* WebKit: hide scrollbar */
+
+/* Consistent spacing between labels/fields */
+.quote-form label{display:block;margin:0 0 8px;}
+.quote-form .grid-2,.quote-form .grid-3{gap:18px;}
+
+/* Keep action buttons on one row (Cancel next to Send) */
+.form-actions{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+  padding-top:18px;
+}
+.form-actions .btn{flex:0 0 auto;}
+.form-status{flex:1 0 100%;margin:10px 0 0;opacity:.9;font-size:13px;}
+
+@media (max-width:560px){
+  /* Ensure buttons stay readable on phones */
+  .form-actions .btn{flex:1 1 160px;}
+}
+
+/* =====================================================================
+   Quote modal (override): keep Submit visible + consistent spacing
+   ===================================================================== */
+
+/* Allow the overlay to scroll if the screen is very short,
+   but avoid hiding the scrollbar (hidden scrollbar = users think
+   the Submit button is missing). */
+#quoteModal{ overflow-y:auto; }
+
+/* Keep the card within the viewport while still letting the overlay scroll */
+#quoteModal .modal-card{ max-height: calc(100dvh - 32px); }
+
+/* =====================================================================
+   Quote modal – FINAL layout rules
+   Fixes:
+   - Buttons appearing outside / clipped by the modal border
+   - Labels looking like they belong to the row above
+   - Label text not centered above its own field
+   - Unwanted scrollbars
+   NOTE: Kept as overrides at the end of the file to win specificity.
+   ===================================================================== */
+
+/* Modal container */
+#quoteModal .modal-card{
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;               /* keep border clean */
+  padding-bottom: 22px;           /* ensure buttons never touch/cross border */
+}
+
+/* Modal body: no internal scrollbars */
+#quoteModal .modal-body{
+  max-height: none !important;
+  overflow: visible !important;
+  padding-bottom: 0;
+}
+
+/* Form layout + consistent spacing */
+#quoteModal form{
+  display: grid;
+  gap: 18px;
+}
+
+/* Each label wraps its input – keep label close to its own field */
+#quoteModal form label{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;                      /* label-to-input spacing */
+  margin: 0;
+  text-align: center;             /* center label text over its own control */
+}
+
+/* Inputs remain normal inside */
+#quoteModal form input,
+#quoteModal form select,
+#quoteModal form textarea{
+  width: 100%;
+}
+
+/* Buttons row stays inside the modal */
+#quoteModal .form-actions{
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 6px;
+}
+
+/* Reduce textarea height slightly so the whole form fits comfortably */
+#quoteModal textarea{
+  min-height: 140px;
+  max-height: 180px;
+}
+
+/* Responsive: stack the first row (company/phone/email) on small screens */
+@media (max-width: 900px){
+  #quoteModal .quote-grid-3,
+  #quoteModal .quote-grid-3wide,
+  #quoteModal .quote-grid-3cols{
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Show the whole form without hiding scrollbars inside the modal body.
+   If scrolling is needed, it will happen on the overlay. */
+#quoteModal .modal-body{
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 20px 22px 18px !important;
+}
+
+/* Tighter, cleaner vertical rhythm so everything fits nicely */
+#quoteModal .form-group{ margin-bottom: 14px; }
+#quoteModal label{ margin: 0 0 6px; }
+#quoteModal .form-grid{ gap: 14px; }
+
+/* Keep action buttons on one line (Cancel next to Submit) */
+#quoteModal .form-actions{
+  display:flex;
+  gap:14px;
+  flex-wrap: nowrap;
+  align-items:center;
+  margin-top: 14px;
+  padding-bottom: 2px;
+}
+
+/* Make Notes not excessively tall to avoid pushing buttons off-screen */
+#quoteModal textarea{ min-height: 120px; }
+
+@media (max-width:560px){
+  /* On small screens, allow the buttons to wrap if absolutely necessary */
+  #quoteModal .form-actions{ flex-wrap: wrap; }
+  #quoteModal .form-actions .btn{ flex: 1 1 180px; }
+}
+
+/* ==============================
+   Quote modal – keep everything visible (no internal scrollbar)
+   ============================== */
+html, body{ overflow-x: hidden; }
+
+/* No scrollbars inside the modal overlay/card */
+#quoteModal{ overflow: hidden; }
+#quoteModal .modal-card{ max-height: 88vh; overflow: hidden; }
+#quoteModal .modal-body{ overflow: visible; padding-bottom: 22px; }
+
+/* Make sure the content fits comfortably */
+#quoteModal input,
+#quoteModal select{
+  height: 44px;
+}
+#quoteModal textarea{
+  height: 120px;
+  max-height: 120px;
+  resize: none;
+}
+
+/* Keep buttons on one row on desktop */
+#quoteModal .form-actions{ gap: 14px; align-items: center; flex-wrap: nowrap; }
+
+@media (max-height: 720px){
+  #quoteModal .modal-card{ max-height: 92vh; }
+  #quoteModal textarea{ height: 96px; max-height: 96px; }
+}
+
+/* ================================
+   FINAL: Quote modal (no scroll, buttons not clipped)
+   ================================ */
+#quoteModal{ overflow: hidden !important; }
+
+/* Make the card a flex column so footer buttons always have space */
+#quoteModal .modal-card{
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: visible !important;
+  /* Use dynamic viewport units for mobile browser toolbars */
+  max-height: calc(100dvh - 72px) !important; /* leave room so buttons never clip */
+  padding-bottom: calc(30px + env(safe-area-inset-bottom)) !important;
+}
+
+/* Keep the body from creating an inner scrollbar */
+#quoteModal .modal-body{
+  flex: 1 1 auto !important;
+  overflow: visible !important;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+}
+
+/* Ensure buttons are fully visible and aligned */
+#quoteModal .form-actions,
+#quoteModal .modal-actions{
+  display: flex !important;
+  gap: 14px !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  margin-top: 18px !important;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+}
+
+/* ---- Quote modal label + grid spacing polish ---- */
+/* Make label text clearly belong to the field under it (and align centered) */
+#quoteModal .quote-form label,
+#quoteModal .form label{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;              /* more space between label text and input */
+  text-align: center;     /* center label text relative to its input */
+  margin: 0;
+}
+
+/* Increase row spacing so labels don't look attached to the previous row */
+#quoteModal .quote-form .grid-3,
+#quoteModal .quote-form .grid-2,
+#quoteModal .form .grid-3,
+#quoteModal .form .grid-2{
+  gap: 18px 22px;
+}
+
+/* Keep inputs looking consistent even when labels are centered */
+#quoteModal .quote-form input,
+#quoteModal .quote-form select,
+#quoteModal .quote-form textarea,
+#quoteModal .form input,
+#quoteModal .form select,
+#quoteModal .form textarea{
+  width: 100%;
+  margin: 0; /* spacing handled by label gap */
+}
+
+/* Buttons should stay inside the card and not cross the border line */
+#quoteModal .form-actions{
+  flex-wrap: nowrap;
+}
+
+/* Ensure action buttons never sit on the modal border */
+#quoteModal .form-actions{
+  position: static;
+  margin-top: 18px;
+  padding-top: 0;
+  padding-bottom: 14px; /* extra bottom space so buttons never touch the border */
+}
+
+#quoteModal .modal-body{
+  padding-bottom: 20px;
+}
+
+#quoteModal .modal-card{
+  padding-bottom: 28px;
+}
+
+/* Clearer label↔input spacing + centered labels per field */
+#quoteModal .field{ gap: 10px; }
+
+/* Slightly larger row spacing without making the modal scroll */
+#quoteModal .form-grid{ gap: 20px; }
+
+/* Reduce Notes height to free space for consistent spacing */
+#quoteModal textarea{ min-height: 120px; height: 120px; }
+
+/* =====================================================
+   FINAL v3: Quote modal spacing polish (requested)
+   - More vertical space between rows (labels not stuck to above inputs)
+   - Smaller Notes height to free space
+   - Buttons never touch the bottom border
+   ===================================================== */
+
+#quoteModal form{
+  gap: 26px !important;
+}
+
+#quoteModal .quote-grid-3,
+#quoteModal .quote-grid-2{
+  row-gap: 16px !important;
+  column-gap: 22px !important;
+}
+
+#quoteModal label{
+  gap: 12px !important;
+}
+
+#quoteModal textarea{
+  height: 100px !important;
+  min-height: 100px !important;
+  max-height: 100px !important;
+}
+
+#quoteModal .form-actions{
+  margin-top: 10px !important;
+  padding-bottom: 22px !important;
+}
+
+/* =====================================================
+   FINAL v5: Buttons never clip + better vertical rhythm
+   - Slightly smaller Notes height
+   - Slightly tighter overall gaps
+   - Give footer buttons a bit more breathing room
+   ===================================================== */
+
+/* Let the card use a tiny bit more viewport height */
+#quoteModal .modal-card{
+  max-height: calc(100dvh - 56px) !important;
+}
+
+/* Keep the existing spacing (labels looked good), just free a little height */
+#quoteModal textarea{
+  height: 90px !important;
+  min-height: 90px !important;
+  max-height: 90px !important;
+}
+
+/* Bring buttons up a little so they never touch/cut the bottom border */
+#quoteModal .form-actions{
+  margin-top: 6px !important;
+  padding-bottom: 22px !important;
+}
+
+/* =============================
+   FINAL: Request a Quote modal layout
+   - Keep generous spacing between sections
+   - Center labels over their own fields
+   - Prevent any internal scrollbars/clipping
+   ============================= */
+
+#quoteModal .modal-card{
+  /* ensure buttons never clip on bottom */
+  padding-bottom: 28px !important;
+  padding-bottom: calc(28px + env(safe-area-inset-bottom)) !important;
+  max-height: calc(100dvh - 40px) !important;
+}
+
+#quoteModal .modal-body{
+  display: flex !important;
+  flex-direction: column !important;
+  /* spacing BETWEEN field blocks (company row -> service row -> cargo row -> notes -> actions) */
+  gap: 20px !important;
+  padding-bottom: 22px !important;
+}
+
+/* label sits clearly ABOVE its own input */
+#quoteModal .modal-body label{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;          /* space between label text and its input */
+  margin: 0 !important;
+  text-align: center !important; /* center the label text */
+}
+
+/* keep user typing left-aligned inside inputs */
+#quoteModal .modal-body input,
+#quoteModal .modal-body select,
+#quoteModal .modal-body textarea{
+  text-align: left !important;
+}
+
+/* grid blocks */
+#quoteModal .quote-grid-3{
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  column-gap: 22px !important;
+}
+
+#quoteModal .quote-grid-2{
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  column-gap: 22px !important;
+}
+
+/* notes height reduced to free space for section spacing */
+#quoteModal .quote-notes textarea{
+  height: 96px !important;
+  min-height: 96px !important;
+  resize: none !important;
+}
+
+/* action buttons: sit comfortably above modal border */
+#quoteModal .form-actions{
+  margin-top: 4px !important;   /* smaller gap from Notes */
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  /* keep buttons comfortably above the modal border without changing overall layout */
+  position: relative !important;
+  top: -10px !important;
+}
+
+/* Responsive: stack fields on tablet/mobile and keep modal within viewport */
+@media (max-width: 900px){
+  #quoteModal .quote-grid-3{ grid-template-columns: 1fr !important; }
+  #quoteModal .quote-grid-2{ grid-template-columns: 1fr !important; }
+  #quoteModal .modal-body{ gap: 18px !important; }
+  #quoteModal .quote-notes textarea{ height: 88px !important; min-height: 88px !important; }
+}
+
+@media (max-width: 520px){
+  #quoteModal .modal-card{
+    max-height: calc(100dvh - 24px) !important;
+    padding: 18px !important;
+    padding-bottom: 22px !important;
+    padding-bottom: calc(22px + env(safe-area-inset-bottom)) !important;
+  }
+  #quoteModal .modal-body{ gap: 16px !important; }
+  #quoteModal .modal-head h2{ font-size: 34px !important; }
+  #quoteModal .quote-notes textarea{ height: 78px !important; min-height: 78px !important; }
+}

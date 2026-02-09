@@ -12,16 +12,28 @@
   const navMenu = $('#navMenu');
 
   if (navToggle && navMenu) {
-    navToggle.addEventListener('click', () => {
-      const open = navMenu.classList.toggle('open');
+    // Overlay behind the drawer (improves behaviour on iOS / in-app browsers)
+    let overlay = $('.nav-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'nav-overlay';
+      document.body.appendChild(overlay);
+    }
+
+    const setNavOpen = (open) => {
+      navMenu.classList.toggle('open', open);
+      navToggle.classList.toggle('open', open);
       navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.classList.toggle('nav-open', open);
+    };
+    navToggle.addEventListener('click', () => {
+      setNavOpen(!navMenu.classList.contains('open'));
     });
 
+    overlay.addEventListener('click', () => setNavOpen(false));
+
     $$('#navMenu a').forEach((a) =>
-      a.addEventListener('click', () => {
-        navMenu.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
-      })
+      a.addEventListener('click', () => setNavOpen(false))
     );
 
     document.addEventListener('click', (e) => {
@@ -29,8 +41,7 @@
       if (!navMenu.classList.contains('open')) return;
       const t = e.target;
       if (navMenu.contains(t) || navToggle.contains(t)) return;
-      navMenu.classList.remove('open');
-      navToggle.setAttribute('aria-expanded', 'false');
+      setNavOpen(false);
     });
   }
 
@@ -55,8 +66,17 @@
     document.body.classList.remove('modal-open');
   };
 
-  openQuoteBtns.forEach((btn) => btn.addEventListener('click', openQuote));
-  closeQuoteBtns.forEach((btn) => btn.addEventListener('click', closeQuote));
+  // Direct bindings (for buttons that exist at load)
+  openQuoteBtns.forEach((btn) => btn.addEventListener('click', (e) => { e.preventDefault(); openQuote(); }));
+  closeQuoteBtns.forEach((btn) => btn.addEventListener('click', (e) => { e.preventDefault(); closeQuote(); }));
+
+  // Event delegation (covers buttons added later / edge cases where binding didn't happen)
+  document.addEventListener('click', (e) => {
+    const openBtn = e.target.closest('[data-open-quote]');
+    if (openBtn) { e.preventDefault(); openQuote(); return; }
+    const closeBtn = e.target.closest('[data-close-quote]');
+    if (closeBtn) { e.preventDefault(); closeQuote(); }
+  });
 
   if (quoteModal) {
     quoteModal.addEventListener('click', (e) => {

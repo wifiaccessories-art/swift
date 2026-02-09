@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Contact | Swift Logistics Solutions</title>
-  <meta name="description" content="Contact Swift Logistics Solutions in Mississauga (Toronto area). Phone, email, and address. Request a quote anytime.">
+  <meta name="description" content="Contact Swift Logistics Solutions in Mississauga (Toronto area). Phone, email, address, map, and quick forms for freight quotes and inquiries.">
   <meta name="theme-color" content="#0B1020">
   <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="contact-page">
+<body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header" id="top">
   <div class="container nav-wrap">
@@ -43,8 +43,8 @@
       <div class="nav-menu" id="navMenu">
         <a href="index.html" class="nav-link">Home</a>
         <a href="services.html" class="nav-link">Services</a>
-        <a href="about.html" class="nav-link">About Us</a>
-        <a href="contact.html" class="nav-link">Contact Us</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
 
         <div class="nav-actions">
           <button class="btn btn-primary quote-open" type="button">
@@ -107,8 +107,55 @@
         </div>
       </div>
 
+      <div class="divider"></div>
+
+      <h3>Send a message</h3>
+      <form class="form" id="contactForm" action="https://formsubmit.co/ankur.savla90@gmail.com" method="POST">
+        <input type="hidden" name="_cc" value="sales@swiftlogistics.ca">
+        <input type="hidden" name="_subject" value="Website contact message — Swift Logistics Solutions">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="thanks.html">
+        <label>
+          Name
+          <input name="name" type="text" autocomplete="name" required>
+        </label>
+
+        <label>
+          Email
+          <input name="email" type="email" autocomplete="email" required>
+        </label>
+
+        <label>
+          Subject
+          <input name="subject" type="text" placeholder="e.g., Quote request — Ocean LCL">
+        </label>
+
+        <label>
+          Message
+          <textarea name="message" rows="5" placeholder="Tell us origin, destination, cargo type, weight/dimensions, and ready date."></textarea>
+        </label>
+
+        <button class="btn btn-primary" type="submit">Send</button>
+        <p id="quoteStatus" class="fineprint" style="margin-top:10px;opacity:.95;"></p>
+        <p class="fineprint muted">We’ll reply by email within 1 business day. Or email sales@swiftlogistics.ca.</p>
+      </form>
     </div>
 
+    <div class="map-below">
+        <div class="mini-gallery">
+          <img src="assets/images/container-ship-side.jpg" alt="Ocean freight services">
+          <img src="assets/images/air-cargo-plane.jpg" alt="Air freight services">
+        </div>
+        <div class="cta-banner compact">
+          <div>
+            <h3>Fast quote turnaround</h3>
+            <p class="muted">Share your cargo details and we’ll respond with routing options.</p>
+          </div>
+          <button class="btn btn-primary quote-open" type="button">Get a Quote</button>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -128,9 +175,9 @@
     <div>
       <h3>Company</h3>
       <ul class="footer-links">
-        <li><a href="about.html">About Us</a></li>
+        <li><a href="about.html">About</a></li>
         <li><a href="services.html">Services</a></li>
-        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
 
@@ -161,18 +208,14 @@
     </div>
 
     <form class="form" id="quoteForm">
-<div class="grid-3">
+<div class="grid-2">
         <label>
-          Company Name
-          <input type="text" name="company" placeholder="Company name" autocomplete="organization" required>
+          Full name
+          <input name="name" type="text" autocomplete="name" required>
         </label>
         <label>
-          Phone Number
-          <input type="tel" name="phone" placeholder="Enter your phone number" autocomplete="tel" inputmode="tel" required>
-        </label>
-        <label>
-          Email Address
-          <input type="email" name="email" placeholder="Email address" autocomplete="email" required>
+          Email
+          <input name="email" type="email" autocomplete="email" required>
         </label>
       </div>
 
@@ -188,27 +231,26 @@
             <option>Warehousing & Distribution</option>
             <option>Door-to-Door Logistics</option>
             <option>Temperature-Controlled</option>
-        <option value="Other">Other</option>
           </select>
         </label>
         <label>
           Origin
-          <input name="origin" required type="text" placeholder="City, Country">
+          <input name="origin" type="text" placeholder="City, Country">
         </label>
         <label>
           Destination
-          <input name="destination" required type="text" placeholder="City, Country">
+          <input name="destination" type="text" placeholder="City, Country">
         </label>
       </div>
 
       <div class="grid-2">
         <label>
           Cargo details
-          <input name="cargo_details" required type="text" placeholder="e.g., 2 pallets, 450 kg, non-haz">
+          <input name="cargo" type="text" placeholder="e.g., 2 pallets, 450 kg, non-haz">
         </label>
         <label>
           Ready date
-          <input name="ready_date" type="date" required>
+          <input name="ready" type="date">
         </label>
       </div>
 
@@ -220,7 +262,6 @@
       <div class="form-actions">
         <button class="btn btn-primary" type="submit">Send Request</button>
         <button class="btn btn-ghost" type="button" data-close="true">Cancel</button>
-        <p id="quoteStatus" class="form-status" aria-live="polite"></p>
       </div>
 
       
