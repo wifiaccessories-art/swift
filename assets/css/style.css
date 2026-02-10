@@ -142,6 +142,18 @@ body.nav-open .nav-overlay{
   opacity:1;
   pointer-events:auto;
 }
+
+
+/*
+  iOS Safari + backdrop-filter can make outlined (ghost) hero buttons look like a
+  dark empty rounded rectangle behind the mobile menu. Hide the ghost CTA only
+  while the nav drawer is open.
+*/
+body.nav-open .page-hero .hero-actions .btn-ghost{
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
 .nav-link{
   text-decoration:none;
   color:var(--muted);
@@ -828,6 +840,8 @@ input, select, textarea{max-width:100%}
 
 /* Responsive */
 @media (max-width: 980px){
+  /* Slightly darker scrim on small screens to avoid iOS blur artifacts */
+  body.nav-open .nav-overlay{ background: rgba(3,6,12,.78); }
   .hero-grid{grid-template-columns: 1fr; }
   .hero-metrics{grid-template-columns: 1fr; }
   .services-grid{grid-template-columns: 1fr 1fr}
