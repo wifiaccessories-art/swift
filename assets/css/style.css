@@ -845,7 +845,12 @@ input, select, textarea{max-width:100%}
   .nav-toggle{display:block}
   .nav-menu{
     position: fixed;
-    top: 0;
+    /*
+      Mobile drawer: start below the sticky header.
+      This prevents the empty top area from showing as a dark/black rectangle
+      on iOS when opening the hamburger menu.
+    */
+    top: 76px;
     right: 0;
     bottom: 0;
     left: auto;
@@ -854,8 +859,8 @@ input, select, textarea{max-width:100%}
     background: rgba(10,12,20,.92);
     backdrop-filter: blur(16px);
     border-left-color: rgba(255,255,255,.08);
-    border-radius: 0;
-    padding: 86px 16px 16px;
+    border-radius: 18px 0 0 18px;
+    padding: 18px 16px 16px;
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
