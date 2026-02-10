@@ -154,6 +154,21 @@ body.nav-open .page-hero .hero-actions .btn-ghost{
   visibility: hidden !important;
 }
 
+/* Extra safety: on iOS Safari, other pill/outline buttons (not just .btn-ghost)
+   can still render as an empty dark bar behind the open mobile menu.
+   While the nav drawer is open, hide buttons in the page content (main).
+   This does NOT affect buttons inside the header nav drawer.
+*/
+@media (max-width: 860px){
+  body.nav-open main .btn,
+  body.nav-open main a.btn,
+  body.nav-open main button.btn{
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
 .nav-link{
   text-decoration:none;
   color:var(--muted);

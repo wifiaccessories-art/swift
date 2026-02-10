@@ -53,6 +53,18 @@
   const closeQuoteBtns = $$('[data-close-quote]');
 
   const openQuote = () => {
+    // If the mobile menu is open, close it first so the modal has full space
+    // and no behind-the-menu artifacts show through.
+    const navMenu = $('#navMenu');
+    if (navMenu && navMenu.classList.contains('open')) {
+      const navToggle = $('#navToggle');
+      navMenu.classList.remove('open');
+      if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('nav-open');
+      document.body.style.overflow = '';
+      const overlay = document.querySelector('.nav-overlay');
+      if (overlay) overlay.remove();
+    }
     if (!quoteModal) return;
     quoteModal.classList.add('open');
     document.body.classList.add('modal-open');
