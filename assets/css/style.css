@@ -871,36 +871,32 @@ input, select, textarea{max-width:100%}
 }
 @media (max-width: 720px){
   .nav-toggle{display:block}
-  .nav-menu{
+    .nav-menu{
     position: fixed;
-    /*
-      Mobile drawer: start below the sticky header.
-      This prevents the empty top area from showing as a dark/black rectangle
-      on iOS when opening the hamburger menu.
-    */
+    /* Mobile drawer: start below the sticky header */
     top: 76px;
     right: 0;
     bottom: 0;
     left: auto;
     width: min(82vw, 320px);
     border: 1px solid var(--stroke);
-    background: rgba(10,12,20,.92);
-    backdrop-filter: blur(16px);
+    /* Solid background on phones prevents the dark/ghost bar artifact */
+    background: rgba(10,12,20,.98);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border-left-color: rgba(255,255,255,.08);
     border-radius: 18px 0 0 18px;
-    /* More top padding so the first item (Home) never touches the
-       mobile “ghost bar” area that can appear under the blurred header
-       on iOS/Android when opening the hamburger menu. */
-    padding: 44px 16px 22px;
+    /* Enough top space so “Home” never touches the top area */
+    padding: 40px 16px 22px;
     flex-direction: column;
     align-items: stretch;
-    gap: 22px;
+    gap: 26px;
     display:flex;
     transform: translateX(110%);
     transition: transform .2s ease;
     z-index: 90;
   }
-  html[data-theme="light"] .nav-menu{background: rgba(255,255,255,.92)}
+  html[data-theme="light"] .nav-menu{background: rgba(255,255,255,.98)}
   .nav-menu.open{transform: translateX(0)}
   .nav-actions{margin-left:0; flex-direction:column}
   .media-stack{gap: 14px;}
