@@ -888,7 +888,7 @@ input, select, textarea{max-width:100%}
     backdrop-filter: blur(16px);
     border-left-color: rgba(255,255,255,.08);
     border-radius: 18px 0 0 18px;
-    padding: 18px 16px 16px;
+    padding: 0 16px 16px;
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
