@@ -886,8 +886,11 @@ input, select, textarea{max-width:100%}
     -webkit-backdrop-filter: none;
     border-left-color: rgba(255,255,255,.08);
     border-radius: 18px 0 0 18px;
-    /* Enough top space so “Home” never touches the top area */
-    padding: 40px 16px 22px;
+    /*
+      Phones: keep "Home" clear of the top edge/pill that some mobile browsers
+      render behind the drawer.
+    */
+    padding: calc(64px + env(safe-area-inset-top)) 16px calc(22px + env(safe-area-inset-bottom));
     flex-direction: column;
     align-items: stretch;
     gap: 26px;
