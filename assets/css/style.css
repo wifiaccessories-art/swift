@@ -145,13 +145,12 @@ body.nav-open .nav-overlay{
 
 
 /*
-  iOS Safari + backdrop-filter can make outlined (ghost) hero buttons look like a
-  dark empty rounded rectangle behind the mobile menu. Hide the ghost CTA only
-  while the nav drawer is open.
+  FIX (mobile): When the hamburger menu is open on iOS Safari, some pill/outline
+  CTAs from the page content can render as an empty dark rounded bar behind the
+  menu (backdrop-filter quirk). Hide hero action CTAs while nav is open.
 */
-body.nav-open .page-hero .hero-actions .btn-ghost{
-  opacity: 0 !important;
-  visibility: hidden !important;
+body.nav-open .page-hero .hero-actions{
+  display:none !important;
 }
 
 /* Extra safety: on iOS Safari, other pill/outline buttons (not just .btn-ghost)
@@ -160,14 +159,14 @@ body.nav-open .page-hero .hero-actions .btn-ghost{
    This does NOT affect buttons inside the header nav drawer.
 */
 @media (max-width: 860px){
+  /* Hide page-content buttons while the nav drawer is open (prevents stray bars) */
   body.nav-open main .btn,
   body.nav-open main a.btn,
   body.nav-open main button.btn{
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
+    display: none !important;
   }
 }
+
 
 .nav-link{
   text-decoration:none;
