@@ -888,10 +888,13 @@ input, select, textarea{max-width:100%}
     backdrop-filter: blur(16px);
     border-left-color: rgba(255,255,255,.08);
     border-radius: 18px 0 0 18px;
-    padding: 18px 16px 16px;
+    /* More top padding so the first item (Home) never touches the
+       mobile “ghost bar” area that can appear under the blurred header
+       on iOS/Android when opening the hamburger menu. */
+    padding: 44px 16px 22px;
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
+    gap: 22px;
     display:flex;
     transform: translateX(110%);
     transition: transform .2s ease;
