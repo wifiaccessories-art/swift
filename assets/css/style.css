@@ -176,12 +176,11 @@ body.nav-open .page-hero .hero-actions{
   border:1px solid transparent;
   transition: all .2s ease;
 }
-  /* Desktop hover only (prevents iOS/Android stuck hover) */
-  @media (hover: hover) and (pointer: fine){
-    .nav-link:hover{color:var(--text);
-background:var(--surface);
-border-color:var(--stroke);}
-  }
+.nav-link:hover{
+  color:var(--text);
+  background:var(--surface);
+  border-color:var(--stroke);
+}
 .nav-actions{display:flex; gap:10px; align-items:center; margin-left:6px}
 
 .btn{
@@ -882,9 +881,9 @@ input, select, textarea{max-width:100%}
     width: min(82vw, 320px);
     border: 1px solid var(--stroke);
     /* Solid background on phones prevents the dark/ghost bar artifact */
-    background: #0A0C14;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
+    background: rgba(10,12,20,1);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border-left-color: rgba(255,255,255,.08);
     border-radius: 18px 0 0 18px;
     /*
@@ -892,42 +891,20 @@ input, select, textarea{max-width:100%}
       render behind the drawer.
     */
     padding: calc(18px + env(safe-area-inset-top)) 16px calc(22px + env(safe-area-inset-bottom));
+    height: calc(100dvh - 76px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-top: 0;
     flex-direction: column;
     align-items: stretch;
     gap: 26px;
     display:flex;
-    transform: translate3d(110%,0,0);
+    transform: translateX(110%);
     transition: transform .2s ease;
     z-index: 90;
-    isolation: isolate;
-    contain: paint;
-    will-change: transform;
   }
-  html[data-theme="light"] .nav-menu{background: #FFFFFF}
-  .nav-menu.open{transform: translate3d(0,0,0)}
-/* Phones: remove any persistent highlight/pill on drawer links */
-.nav-menu .nav-link{
-  display:block;
-  width:100%;
-  padding: 10px 0;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  outline: none !important;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  -webkit-touch-callout: none;
-  touch-action: manipulation;
-}
-.nav-menu .nav-link:hover,
-.nav-menu .nav-link:active,
-.nav-menu .nav-link:focus,
-.nav-menu .nav-link:focus-visible{
-  background: transparent !important;
-  border-color: transparent !important;
-  box-shadow: none !important;
-  outline: none !important;
-}
+  html[data-theme="light"] .nav-menu{background: rgba(255,255,255,.98)}
+  .nav-menu.open{transform: translateX(0)}
   .nav-actions{margin-left:0; flex-direction:column}
   .media-stack{gap: 14px;}
   .media-card img{max-height: 240px;}
@@ -2314,5 +2291,23 @@ html, body{ overflow-x: hidden; }
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
     background: rgba(8, 12, 20, 0.98) !important;
+  }
+}
+
+/* -------------------------------------------------
+   Mobile menu iOS/Android fix
+   Some in-app browsers clip fixed elements inside backdrop-filter/sticky headers.
+   When the drawer is open, disable header blur and overlay blur on small screens
+   so the menu paints correctly and the stray rounded bar disappears.
+------------------------------------------------- */
+@media (max-width: 720px){
+  body.nav-open .site-header{
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background: rgba(10,12,20,.92) !important;
+  }
+  .nav-overlay{
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
   }
 }
