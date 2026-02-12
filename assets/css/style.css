@@ -176,10 +176,13 @@ body.nav-open .page-hero .hero-actions{
   border:1px solid transparent;
   transition: all .2s ease;
 }
-.nav-link:hover{
-  color:var(--text);
-  background:var(--surface);
-  border-color:var(--stroke);
+/* Desktop hover only (prevents iOS/Android "stuck hover" pill behind first link) */
+@media (hover: hover) and (pointer: fine){
+  .nav-link:hover{
+    color:var(--text);
+    background:var(--surface);
+    border-color:var(--stroke);
+  }
 }
 .nav-actions{display:flex; gap:10px; align-items:center; margin-left:6px}
 
