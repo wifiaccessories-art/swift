@@ -1002,6 +1002,10 @@ html[data-theme="light"] #fxCanvas{ opacity:.22; }
 .reveal-right{ transform: translateX(16px) scale(.99); }
 .reveal-left.in, .reveal-right.in{ transform: translateX(0) scale(1); }
 
+@media (prefers-reduced-motion: reduce){
+  .reveal{opacity:1 !important; transform:none !important; transition:none !important;}
+}
+
 /* Service cards: slight lift + animated sheen */
 .services-grid .card{
   overflow:hidden;
@@ -2310,4 +2314,18 @@ html, body{ overflow-x: hidden; }
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
+}
+
+
+/* Full-bleed Swift banner (Home) */
+#swift-banner{ padding:0; margin:0; }
+#swift-banner .swift-banner-img{
+  display:block;
+  width:100vw;
+  max-width:none;
+  height:auto;
+  margin-left: calc(50% - 50vw);
+  border:0;
+  border-radius:0;
+  box-shadow:none;
 }

@@ -102,22 +102,9 @@
   // -------------------------------------------------
   // Reveal animations
   // -------------------------------------------------
-  const revealEls = $$('.reveal');
-  if (revealEls.length) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in');
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-
-    revealEls.forEach((el) => io.observe(el));
-  }
+  // Handled by assets/js/reveal.js (kept separate so we can
+  // apply stagger delays and scroll-based reveal consistently
+  // across all pages).
 
   // -------------------------------------------------
   // Ambient background canvas
