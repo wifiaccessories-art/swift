@@ -110,8 +110,8 @@
       <div class="divider"></div>
 
       <h3>Send a message</h3>
-      <form class="form" id="contactForm" action="https://formsubmit.co/ankur.savla90@gmail.com" method="POST">
-        <input type="hidden" name="_cc" value="sales@swiftlogistics.ca">
+      <form class="form" id="contactForm" action="https://formsubmit.co/sales@swiftlogistics.ca" method="POST">
+        <!-- Send requests only to sales@swiftlogistics.ca -->
         <input type="hidden" name="_subject" value="Website contact message — Swift Logistics Solutions">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_captcha" value="false">
